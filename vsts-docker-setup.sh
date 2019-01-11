@@ -34,9 +34,8 @@ sudo usermod -aG docker $5
 # Install VSTS build agent dependencies
 
 echo "Installing libcurl4 and git-lfs package" >> /mnt/install.progress.txt
-sudo apt-get install -y libcurl4-openssl-dev 
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-#sudo apt-get -y install libunwind8 libcurl3
+sudo apt-get install -y libcurl4-openssl-dev git-lfs
 sudo /bin/date +%H:%M:%S >> /mnt/install.progress.txt
 
 
