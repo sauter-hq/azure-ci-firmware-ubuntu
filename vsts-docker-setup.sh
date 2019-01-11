@@ -3,12 +3,12 @@
 sudo chown sauter:sauter /mnt/
 
 # Install Build Tools
-sudo /bin/date +%H:%M:%S > /mnt/install.progress.txt
+sudo /bin/date +%H:%M:%S
 
-echo "ooooo      VSTS AGENT + DOCKER SETUP      ooooo" >> /mnt/install.progress.txt
+echo "ooooo      VSTS AGENT + DOCKER SETUP      ooooo"
 
 # Install Docker Engine and Compose
-echo "Installing Docker CE" >> /mnt/install.progress.txt
+echo "Installing Docker CE"
 
 
 sudo apt-get update
@@ -33,52 +33,52 @@ sudo usermod -aG docker $5
 
 # Install VSTS build agent dependencies
 
-echo "Installing libcurl4 and git-lfs package" >> /mnt/install.progress.txt
+echo "Installing libcurl4 and git-lfs package"
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
 sudo apt-get install -y libcurl4-openssl-dev git-lfs
-sudo /bin/date +%H:%M:%S >> /mnt/install.progress.txt
+sudo /bin/date +%H:%M:%S
 
 
 # Download VSTS build agent and required security patch
 
-echo "Downloading VSTS Build agent package" >> /mnt/install.progress.txt
+echo "Downloading VSTS Build agent package"
 
 cd /mnt/
 sudo -u $5 wget https://vstsagentpackage.azureedge.net/agent/2.144.0/vsts-agent-linux-x64-2.144.0.tar.gz 
 
-sudo /bin/date +%H:%M:%S >> /mnt/install.progress.txt
+sudo /bin/date +%H:%M:%S
 
 
-echo "Installing VSTS Build agent package" >> /mnt/install.progress.txt
+echo "Installing VSTS Build agent package"
 
 # Install VSTS agent
 sudo -u $5 mkdir /mnt/vsts-agent
 cd /mnt/vsts-agent
-sudo -u $5 tar xzf /mnt/downloads/vsts-agent-linux*
+sudo -u $5 tar xzf /mnt/vsts-agent-linux*
 
 echo "LANG=en_US.UTF-8" > .env
 echo "export LANG=en_US.UTF-8" >> /mnt/.bashrc
 export LANG=en_US.UTF-8
 
-echo URL: $1 > /mnt/vsts.install.log.txt 2>&1
-echo PAT: HIDDEN >> /mnt/vsts.install.log.txt 2>&1
-echo Pool: $3 >> /mnt/vsts.install.log.txt 2>&1
-echo Agent: $4 >> /mnt/vsts.install.log.txt 2>&1
-echo User: $5 >> /mnt/vsts.install.log.txt 2>&1
-echo =============================== >> /mnt/vsts.install.log.txt 2>&1
+echo URL: $1
+echo PAT: HIDDEN
+echo Pool: $3
+echo Agent: $4
+echo User: $5
+echo =============================== 
 
-echo Running Agent.Listener >> /mnt/vsts.install.log.txt 2>&1
+echo Running Agent.Listener
 sudo -u $5 -E bin/Agent.Listener configure --unattended --nostart --replace --acceptteeeula --url $1 --auth PAT --token $2 --pool $3 --agent $4 >> /mnt/vsts.install.log.txt 2>&1
-echo =============================== >> /mnt/vsts.install.log.txt 2>&1
-echo Running ./svc.sh install >> /mnt/vsts.install.log.txt 2>&1
-sudo -E ./svc.sh install $5 >> /mnt/vsts.install.log.txt 2>&1
-echo =============================== >> /mnt/vsts.install.log.txt 2>&1
-echo Running ./svc.sh start >> /mnt/vsts.install.log.txt 2>&1
+echo ===============================
+echo Running ./svc.sh install
+sudo -E ./svc.sh install $5
+echo ===============================
+echo Running ./svc.sh start
 
-sudo -E ./svc.sh start >> /mnt/vsts.install.log.txt 2>&1
-echo =============================== >> /mnt/vsts.install.log.txt 2>&1
+sudo -E ./svc.sh start
+echo ===============================
 
 sudo chown -R $5.$5 .*
 
-echo "ALL DONE!" >> /mnt/install.progress.txt
-sudo /bin/date +%H:%M:%S >> /mnt/install.progress.txt
+echo "ALL DONE!"
+sudo /bin/date +%H:%M:%S
