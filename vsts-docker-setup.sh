@@ -28,7 +28,7 @@ sudo add-apt-repository \
 sudo apt-get update
 sudo apt-get install -y docker-ce
 sudo service docker start
-sudo usermod -aG docker $5
+sudo usermod -aG docker $4
 
 
 # Install VSTS build agent dependencies
@@ -44,7 +44,7 @@ sudo /bin/date +%H:%M:%S
 echo "Downloading VSTS Build agent package"
 
 cd /mnt/
-sudo -u $5 wget https://vstsagentpackage.azureedge.net/agent/2.144.0/vsts-agent-linux-x64-2.144.0.tar.gz 
+sudo -u $4 wget https://vstsagentpackage.azureedge.net/agent/2.144.0/vsts-agent-linux-x64-2.144.0.tar.gz 
 
 sudo /bin/date +%H:%M:%S
 
@@ -52,33 +52,35 @@ sudo /bin/date +%H:%M:%S
 echo "Installing VSTS Build agent package"
 
 # Install VSTS agent
-sudo -u $5 mkdir /mnt/vsts-agent
+sudo -u $4 mkdir /mnt/vsts-agent
 cd /mnt/vsts-agent
-sudo -u $5 tar xzf /mnt/vsts-agent-linux*
+sudo -u $4 tar xzf /mnt/vsts-agent-linux*
 
 echo "LANG=en_US.UTF-8" > .env
 echo "export LANG=en_US.UTF-8" >> /mnt/.bashrc
 export LANG=en_US.UTF-8
 
+agent=`cat /etc/hostname`
+
 echo URL: $1
 echo PAT: HIDDEN
 echo Pool: $3
-echo Agent: $4
-echo User: $5
+echo Agent: $agent
+echo User: $4
 echo =============================== 
 
 echo Running Agent.Listener
-sudo -u $5 -E bin/Agent.Listener configure --unattended --nostart --replace --acceptteeeula --url $1 --auth PAT --token $2 --pool $3 --agent $4 >> /mnt/vsts.install.log.txt 2>&1
+sudo -u $4 -E bin/Agent.Listener configure --unattended --nostart --replace --acceptteeeula --url $1 --auth PAT --token $2 --pool $3 --agent $agent 
 echo ===============================
 echo Running ./svc.sh install
-sudo -E ./svc.sh install $5
+sudo -E ./svc.sh install $4
 echo ===============================
 echo Running ./svc.sh start
 
 sudo -E ./svc.sh start
 echo ===============================
 
-sudo chown -R $5.$5 .*
+sudo chown -R $4.$4 .*
 
 echo "ALL DONE!"
 sudo /bin/date +%H:%M:%S
