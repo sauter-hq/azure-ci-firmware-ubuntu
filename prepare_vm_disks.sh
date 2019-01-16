@@ -174,6 +174,14 @@ scan_partition_format()
 }
 
 
-# Create Partitions
+# Create partitions if needed
 DISKS=$(scan_for_new_disks)
 scan_partition_format
+
+# Always mount datadisk 1
+DATADISK1=/dev/sdc1
+read UUID FS_TYPE < <(blkid -u filesystem ${DATADISK1}|awk -F "[= ]" '{print $3" "$5}'|tr -d "\"")
+add_to_fstab "${UUID}" "${DATA_BASE}/disk1"
+echo "Mounting disk ${DATADISK1} on ${DATA_BASE}/disk1"
+mount ${DATA_BASE}/disk1
+
