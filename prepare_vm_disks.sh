@@ -181,6 +181,7 @@ scan_partition_format
 # Always mount datadisk 1
 DATADISK1=/dev/sdc1
 MOUNTPOINT1=${DATA_BASE}/disk1
+mkdir -p ${MOUNTPOINT1}
 read UUID FS_TYPE < <(blkid -u filesystem ${DATADISK1}|awk -F "[= ]" '{print $3" "$5}'|tr -d "\"")
 add_to_fstab "${UUID}" "${MOUNTPOINT1}"
 echo "Mounting disk ${DATADISK1} on ${MOUNTPOINT1}"
