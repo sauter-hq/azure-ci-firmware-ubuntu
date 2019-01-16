@@ -1,6 +1,7 @@
 #!/bin/sh
+INSTALL_PATH=$5
 
-sudo chown sauter:sauter /mnt/
+sudo chown sauter:sauter ${INSTALL_PATH} 
 
 # Install Build Tools
 sudo /bin/date +%H:%M:%S
@@ -43,7 +44,7 @@ sudo /bin/date +%H:%M:%S
 
 echo "Downloading VSTS Build agent package"
 
-cd /mnt/
+cd ${INSTALL_PATH}
 sudo -u $4 wget https://vstsagentpackage.azureedge.net/agent/2.144.0/vsts-agent-linux-x64-2.144.0.tar.gz 
 
 sudo /bin/date +%H:%M:%S
@@ -52,12 +53,12 @@ sudo /bin/date +%H:%M:%S
 echo "Installing VSTS Build agent package"
 
 # Install VSTS agent
-sudo -u $4 mkdir /mnt/vsts-agent
-cd /mnt/vsts-agent
-sudo -u $4 tar xzf /mnt/vsts-agent-linux*
+sudo -u $4 mkdir ${INSTALL_PATH}/vsts-agent
+cd ${INSTALL_PATH}/vsts-agent
+sudo -u $4 tar xzf ${INSTALL_PATH}/vsts-agent-linux*
 
 echo "LANG=en_US.UTF-8" > .env
-echo "export LANG=en_US.UTF-8" >> /mnt/.bashrc
+echo "export LANG=en_US.UTF-8" >> ${INSTALL_PATH}/.bashrc
 export LANG=en_US.UTF-8
 
 agent=`cat /etc/hostname`
