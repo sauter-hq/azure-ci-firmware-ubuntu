@@ -33,7 +33,7 @@
 # Base path for data disk mount points
 DATA_BASE="/datadisks"
 # Mount options for data disk
-MOUNT_OPTIONS="noatime,nodiratime,nodev,noexec,nosuid,nofail"
+MOUNT_OPTIONS="defaults"
 
 is_partitioned() {
     OUTPUT=$(partx -s ${1} 2>&1)
